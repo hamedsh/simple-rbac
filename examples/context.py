@@ -100,5 +100,5 @@ if not context.check_permission("view", "article"):
 # use it as `check function`
 try:
     context.check_permission("edit", "article").check()
-except PermissionDenied as exception:
+except PermissionDenied:
     print("Yes, of course, a bad man could not edit the article page too.")

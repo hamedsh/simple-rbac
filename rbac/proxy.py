@@ -1,11 +1,8 @@
-from __future__ import absolute_import
-
 import functools
 import collections
 
 
-__all__ = ["dummy_factory", "model_role_factory", "model_resource_factory",
-           "RegistryProxy"]
+__all__ = ["dummy_factory", "model_role_factory", "model_resource_factory", "RegistryProxy"]
 
 # identity tuple
 identity = collections.namedtuple("identity", ["type", "cls", "id"])
@@ -69,8 +66,7 @@ class RegistryProxy(object):
     >>>     return role
     """
 
-    def __init__(self, acl, role_factory=dummy_factory,
-                 resource_factory=model_resource_factory):
+    def __init__(self, acl, role_factory=dummy_factory, resource_factory=model_resource_factory):
         self.acl = acl
         self.make_role = functools.partial(role_factory, self.acl)
         self.make_resource = functools.partial(resource_factory, self.acl)
@@ -98,14 +94,12 @@ class RegistryProxy(object):
     def is_allowed(self, role, operation, resource, **assertion_kwargs):
         role = self.make_role(role)
         resource = self.make_resource(resource)
-        return self.acl.is_allowed(role, operation,
-                                   resource, **assertion_kwargs)
+        return self.acl.is_allowed(role, operation, resource, **assertion_kwargs)
 
     def is_any_allowed(self, roles, operation, resource, **assertion_kwargs):
         roles = [self.make_role(role) for role in roles]
         resource = self.make_resource(resource)
-        return self.acl.is_any_allowed(roles, operation,
-                                       resource, **assertion_kwargs)
+        return self.acl.is_any_allowed(roles, operation, resource, **assertion_kwargs)
 
     def __getattr__(self, attr):
         return getattr(self.acl, attr)

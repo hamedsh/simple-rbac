@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import itertools
 
 
@@ -71,8 +69,7 @@ class Registry(object):
         assert not resource or resource in self._resources
         self._denied[role, operation, resource] = assertion
 
-    def is_allowed(self, role, operation, resource, check_allowed=True,
-                   **assertion_kwargs):
+    def is_allowed(self, role, operation, resource, check_allowed=True, **assertion_kwargs):
         """Check the permission.
 
         If the access is denied, this method will return False; if the access
@@ -95,14 +92,12 @@ class Registry(object):
         for permission in itertools.product(roles, operations, resources):
             if permission in self._denied:
                 assertion = self._denied[permission] or default_assertion
-                if assertion(self, role, operation, resource,
-                             **assertion_kwargs):
+                if assertion(self, role, operation, resource, **assertion_kwargs):
                     return False  # denied by rule immediately
 
             if check_allowed and permission in self._allowed:
                 assertion = self._allowed[permission] or default_assertion
-                if assertion(self, role, operation, resource,
-                             **assertion_kwargs):
+                if assertion(self, role, operation, resource, **assertion_kwargs):
                     is_allowed = True  # allowed by rule
 
         return is_allowed
@@ -120,9 +115,9 @@ class Registry(object):
 
             # if another role gave access,
             # don't bother checking if this one is allowed
-            is_current_allowed = self.is_allowed(role, operation, resource,
-                                                 check_allowed=check_allowed,
-                                                 **assertion_kwargs)
+            is_current_allowed = self.is_allowed(
+                role, operation, resource, check_allowed=check_allowed, **assertion_kwargs
+            )
             if is_current_allowed is False:
                 return False  # denied by rule
             elif is_current_allowed is True:

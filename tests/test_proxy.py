@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import pytest
 
 import rbac.acl
@@ -9,6 +7,7 @@ import rbac.proxy
 # -----------
 # Mock Models
 # -----------
+
 
 class BaseModel(object):
     """The mock model base."""
@@ -67,18 +66,24 @@ def proxy():
 
     # create a acl and give it a proxy
     proxy = rbac.proxy.RegistryProxy(
-        acl, role_factory=rbac.proxy.model_role_factory,
-        resource_factory=rbac.proxy.model_resource_factory)
+        acl, role_factory=rbac.proxy.model_role_factory, resource_factory=rbac.proxy.model_resource_factory
+    )
 
     # create roles
     proxy.add_role(Role('staff'))
-    proxy.add_role(Role('editor'), [
-        Role.query('staff'),
-    ])
-    proxy.add_role(Role('manager'), [
-        Role.query('staff'),
-        Role.query('editor'),
-    ])
+    proxy.add_role(
+        Role('editor'),
+        [
+            Role.query('staff'),
+        ],
+    )
+    proxy.add_role(
+        Role('manager'),
+        [
+            Role.query('staff'),
+            Role.query('editor'),
+        ],
+    )
 
     # create rules
     proxy.allow(Role.query('staff'), 'create', Post)
@@ -159,8 +164,7 @@ def test_is_any_allowed(proxy):
     one_denied_with_allowed = ['staff', 'editor', 'manager']
 
     def test_result(roles):
-        return proxy.is_any_allowed(
-            (Role.query(r) for r in roles), 'edit', Post)
+        return proxy.is_any_allowed((Role.query(r) for r in roles), 'edit', Post)
 
     for roles in (no_allowed, no_allowed_one):
         assert not test_result(roles)

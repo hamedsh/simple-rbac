@@ -1,15 +1,16 @@
-from __future__ import absolute_import
-
 import pytest
 
 import rbac.acl
 import rbac.proxy
 
 
-@pytest.fixture(params=[
-    lambda: rbac.acl.Registry(),
-    lambda: rbac.proxy.RegistryProxy(rbac.acl.Registry()),
-], ids=['registry', 'registry_proxy'])
+@pytest.fixture(
+    params=[
+        lambda: rbac.acl.Registry(),
+        lambda: rbac.proxy.RegistryProxy(rbac.acl.Registry()),
+    ],
+    ids=['registry', 'registry_proxy'],
+)
 def acl(request):
     # create acl registry from parametrized factory
     acl = request.param()

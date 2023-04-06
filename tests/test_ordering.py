@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import pytest
 
 import rbac.acl
@@ -53,7 +51,7 @@ def test_role_evaluation_order_preserved(acl, context, evaluated_roles):
 
 
 def test_short_circuit_skip_deny(acl, context, evaluated_roles):
-    """ If no remaining role could grant access, don't bother checking """
+    """If no remaining role could grant access, don't bother checking"""
     # track which roles are evaluated
     setattr(acl, 'is_allowed', _FunctionProxy(acl.is_allowed, evaluated_roles))
 
@@ -80,8 +78,7 @@ def test_short_circuit_skip_deny(acl, context, evaluated_roles):
 def test_short_circuit_skip_allow(acl, context, evaluated_roles):
     """Once one role is passed, shouldn't other roles should not be checked."""
     # track which roles have their assertion function evaluated
-    assertion = _FunctionProxy(lambda *args, **kwargs: args[1] == '3',
-                               evaluated_roles, role_idx=1)
+    assertion = _FunctionProxy(lambda *args, **kwargs: args[1] == '3', evaluated_roles, role_idx=1)
 
     acl.add_resource('my_resource')
     roles = [str(i) for i in range(10)]

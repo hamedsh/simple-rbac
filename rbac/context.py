@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import functools
 
 
@@ -19,6 +17,7 @@ class PermissionContext(object):
         def wrapper(*args, **kwargs):
             with self:
                 return wrapped(*args, **kwargs)
+
         return functools.update_wrapper(wrapper, wrapped)
 
     def __enter__(self):
@@ -61,8 +60,7 @@ class IdentityContext(object):
         """
         self.load_roles = role_loader
 
-    def check_permission(self, operation, resource,
-                         assertion_kwargs=None, **exception_kwargs):
+    def check_permission(self, operation, resource, assertion_kwargs=None, **exception_kwargs):
         """A context to check the permission.
 
         The keyword arguments would be stored into the attribute `kwargs` of
@@ -75,9 +73,7 @@ class IdentityContext(object):
         context enviroment or a boolean-like value.
         """
         exception = exception_kwargs.pop("exception", PermissionDenied)
-        checker = functools.partial(self._docheck,
-                                    operation=operation, resource=resource,
-                                    **assertion_kwargs or {})
+        checker = functools.partial(self._docheck, operation=operation, resource=resource, **assertion_kwargs or {})
         return PermissionContext(checker, exception, **exception_kwargs)
 
     def has_permission(self, *args, **kwargs):
@@ -85,15 +81,13 @@ class IdentityContext(object):
 
     def has_roles(self, role_groups):
         had_roles = frozenset(self.load_roles())
-        return any(all(role in had_roles for role in role_group)
-                   for role_group in role_groups)
+        return any(all(role in had_roles for role in role_group) for role_group in role_groups)
 
     def _docheck(self, operation, resource, **assertion_kwargs):
         had_roles = self.load_roles()
         role_list = list(had_roles)
         assert len(role_list) == len(set(role_list))  # duplicate role check
-        return self.acl.is_any_allowed(role_list, operation, resource,
-                                       **assertion_kwargs)
+        return self.acl.is_any_allowed(role_list, operation, resource, **assertion_kwargs)
 
 
 class PermissionDenied(Exception):
