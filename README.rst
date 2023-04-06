@@ -1,5 +1,3 @@
-|Build Status| |Coverage Status| |PyPI Version| |Wheel Status|
-
 Simple RBAC
 ===========
 
@@ -13,7 +11,7 @@ Quick Start
 
 ::
 
-    pip install simple-rbac
+    pip install 'simple-rbac @ git+https://github.com/hamedsh/simple-rbac.git'
 
 2. Create a Access Control List
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,17 +201,3 @@ allowed or not, you could use the checking like a boolean value.
     is_allowed = bool(context.check_permission("view", "article"))
 
 .. _hashable: http://docs.python.org/glossary.html#term-hashable
-
-
-.. |Build Status| image:: https://img.shields.io/travis/tonyseek/simple-rbac.svg?style=flat
-   :target: https://travis-ci.org/tonyseek/simple-rbac
-   :alt: Build Status
-.. |Coverage Status| image:: https://img.shields.io/coveralls/tonyseek/simple-rbac.svg?style=flat
-   :target: https://coveralls.io/r/tonyseek/simple-rbac
-   :alt: Coverage Status
-.. |Wheel Status| image:: https://img.shields.io/pypi/wheel/simple-rbac.svg?style=flat
-   :target: https://warehouse.python.org/project/simple-rbac
-   :alt: Wheel Status
-.. |PyPI Version| image:: https://img.shields.io/pypi/v/simple-rbac.svg?style=flat
-   :target: https://pypi.python.org/pypi/simple-rbac
-   :alt: PyPI Version
